@@ -41,3 +41,5 @@ Commit and push — Cloudflare Pages rebuilds automatically. Set `draft: true` t
 ## Newsletter
 The signup form on the homepage is a placeholder (`action="#"`). Point it at your email
 provider's form endpoint (e.g. Buttondown, MailerLite, Kit) when ready.
+
+
