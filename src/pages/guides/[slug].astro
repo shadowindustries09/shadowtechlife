@@ -1,0 +1,48 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides', ({ data }) => !data.draft);
+  return guides.map((g) => ({ params: { slug: g.slug }, props: { guide: g } }));
+}
+
+const { guide } = Astro.props;
+const { Content } = await guide.render();
+const { title, description, category, date, readingTime } = guide.data;
+const fmt = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title={`${title} — ShadowTechLife`} description={description}>
+  <article class="section" style="border-top:none;padding-top:56px">
+    <div class="wrap" style="max-width:760px">
+      <a href="/guides" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--fog);text-decoration:none">← All guides</a>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--local);margin:26px 0 14px">{category}</div>
+      <h1 style="font-size:clamp(30px,5vw,46px);max-width:22ch">{title}</h1>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--fog);margin-top:18px">{fmt}{readingTime ? ` · ${readingTime}` : ''}</div>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <div style="margin-top:56px;padding-top:32px;border-top:1px solid var(--line)">
+        <a href="/#newsletter" class="btn btn-primary">Get the reliability checklist →</a>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style is:global>
+  .prose{margin-top:40px;font-size:17px;color:var(--text);line-height:1.75}
+  .prose h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;color:var(--white);letter-spacing:-.5px;margin:44px 0 14px;line-height:1.2}
+  .prose h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:20px;color:var(--white);margin:32px 0 10px}
+  .prose p{margin:0 0 20px}
+  .prose ul,.prose ol{margin:0 0 20px;padding-left:22px}
+  .prose li{margin:0 0 8px}
+  .prose strong{color:var(--white)}
+  .prose em{color:var(--fog)}
+  .prose a{color:var(--local);text-decoration:underline;text-underline-offset:2px}
+  .prose code{font-family:'IBM Plex Mono',monospace;font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:2px 6px;color:var(--white)}
+  .prose pre{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px;overflow-x:auto;margin:0 0 22px}
+  .prose pre code{border:none;padding:0;background:none}
+  .prose blockquote{border-left:3px solid var(--local);padding-left:18px;margin:0 0 22px;color:var(--fog)}
+</style>

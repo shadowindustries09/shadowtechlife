@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const guides = (await getCollection('guides', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const latest = guides.slice(0, 3);
+
+const categories = [
+  { name: 'Apple Home', href: '/guides?cat=Apple+Home' },
+  { name: 'Matter & Thread', href: '/guides?cat=Matter+%26+Thread' },
+  { name: 'Zigbee & Z-Wave', href: '/guides?cat=Zigbee+%26+Z-Wave' },
+  { name: 'Home Assistant', href: '/guides?cat=Home+Assistant' },
+  { name: 'Sensors', href: '/guides?cat=Sensors' },
+  { name: 'Cameras', href: '/guides?cat=Cameras' },
+  { name: 'Automations', href: '/guides?cat=Automations' },
+  { name: 'Local vs Cloud', href: '/guides?cat=Local+vs+Cloud' },
+];
+---
+<Base>
+  <header style="padding:80px 0 60px">
+    <div class="wrap">
+      <div class="eyebrow">Local-first smart home · Braga, PT</div>
+      <h1>Build a smart home that doesn't need <span class="strike">the cloud</span> to work.</h1>
+      <p style="font-size:18px;max-width:58ch;margin:28px 0 20px;color:var(--text)">Apple Home, Matter, Thread, Zigbee and Z-Wave — tested for reliability, built around local control, with the failure points nobody puts in the marketing. Home Assistant only where it earns its place.</p>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--fog);margin-bottom:34px">Not "smart home made easy." Smart home made <b style="color:var(--white)">reliable</b>.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <a href="#start" class="btn btn-primary">New here? Start with these →</a>
+        <a href="#newsletter" class="btn btn-ghost">Get the reliability checklist</a>
+      </div>
+
+      <div style="margin-top:56px;border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 20px;border-bottom:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--fog);letter-spacing:.5px">
+          <span>SYSTEM_STATUS.log</span>
+          <span style="color:var(--local);display:flex;align-items:center;gap:7px"><span style="width:7px;height:7px;border-radius:50%;background:var(--local);animation:pulse 1.8s infinite"></span>MONITORING</span>
+        </div>
+        <div class="diag-grid" style="display:grid;grid-template-columns:repeat(3,1fr)">
+          <div class="cell" style="padding:22px 20px;border-right:1px solid var(--line)">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--fog);margin-bottom:10px">Lights · Thread</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:var(--white);display:flex;align-items:center;gap:9px;margin-bottom:4px;flex-wrap:wrap">Border router <span class="tag local">LOCAL</span></div>
+            <div style="font-size:13px;color:var(--fog)">Fires with the internet unplugged.</div>
+          </div>
+          <div class="cell" style="padding:22px 20px;border-right:1px solid var(--line)">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--fog);margin-bottom:10px">Doorbell · Wi-Fi</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:var(--white);display:flex;align-items:center;gap:9px;margin-bottom:4px;flex-wrap:wrap">Vendor cloud <span class="tag cloud">CLOUD</span></div>
+            <div style="font-size:13px;color:var(--fog)">Dead when their servers hiccup.</div>
+          </div>
+          <div class="cell" style="padding:22px 20px">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--fog);margin-bottom:10px">Sensors · Zigbee</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:var(--white);display:flex;align-items:center;gap:9px;margin-bottom:4px;flex-wrap:wrap">Local hub <span class="tag local">LOCAL</span></div>
+            <div style="font-size:13px;color:var(--fog)">Sub-second, no round trip.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="start">
+    <div class="wrap">
+      <div class="sec-eyebrow">Start here</div>
+      <h2>New to this? Read these three first.</h2>
+      <p class="sec-lede">Most smart homes break for the same three reasons. Sort these before you buy another device — it'll save you a rebuild later.</p>
+      <div class="grid-3">
+        <a href="/guides/cloud-dependency-test" class="ep">
+          <div class="thumb"><span class="epnum">01</span></div>
+          <div class="body"><div class="cat">Local vs Cloud</div><h3>The cloud dependency test: what dies when the internet does</h3></div>
+        </a>
+        <a href="/guides/thread-border-routers-keep-dropping" class="ep">
+          <div class="thumb"><span class="epnum">02</span></div>
+          <div class="body"><div class="cat">Matter &amp; Thread</div><h3>Why your Thread network keeps silently falling apart</h3></div>
+        </a>
+        <a href="/guides/home-assistant-as-a-hub" class="ep">
+          <div class="thumb"><span class="epnum">03</span></div>
+          <div class="body"><div class="cat">Home Assistant</div><h3>You're using Home Assistant as a hub. Here's the problem.</h3></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="library">
+    <div class="wrap">
+      <div class="sec-eyebrow">The guide library</div>
+      <h2>Every topic, categorized and searchable.</h2>
+      <p class="sec-lede">The written companions to the videos — the pages that turn up in Google when someone's mid-problem at 11pm.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:38px" class="cat-grid">
+        {categories.map((c) => (
+          <a href={c.href} style="border:1px solid var(--line);border-radius:9px;padding:20px 18px;background:var(--panel2);text-decoration:none;display:block">
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:var(--white);margin-bottom:5px">{c.name}</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--fog)">Browse →</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="newsletter">
+    <div class="wrap">
+      <div class="news">
+        <div class="sec-eyebrow" style="text-align:center">The list no algorithm controls</div>
+        <h2>Get the Smart Home Reliability Checklist</h2>
+        <p>The checks I run before I trust any device in a real automation. Plus one email when a new guide drops — no fluff, unsubscribe anytime.</p>
+        <form class="signup" action="#" method="post">
+          <input type="email" name="email" placeholder="you@email.com" aria-label="Email address" required />
+          <button class="btn btn-primary" type="submit">Send it →</button>
+        </form>
+        <div class="fine">Connect your email provider to activate — see the deploy notes.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="latest">
+    <div class="wrap">
+      <div class="sec-eyebrow">Latest guides</div>
+      <h2>Fresh off the channel.</h2>
+      <div class="grid-3">
+        {latest.map((g) => (
+          <a href={`/guides/${g.slug}`} class="ep">
+            <div class="thumb"><span class="epnum">▶</span></div>
+            <div class="body"><div class="cat">{g.data.category}</div><h3>{g.data.title}</h3></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  @media(max-width:760px){ .diag-grid{grid-template-columns:1fr!important} .cell{border-right:none!important;border-bottom:1px solid var(--line)} .cell:last-child{border-bottom:none} }
+  @media(max-width:860px){ .cat-grid{grid-template-columns:repeat(2,1fr)!important} }
+  @media(max-width:480px){ .cat-grid{grid-template-columns:1fr!important} }
+</style>

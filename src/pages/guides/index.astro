@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const guides = (await getCollection('guides', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const categories = [...new Set(guides.map((g) => g.data.category))].sort();
+
+function fmt(d) {
+  return d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+}
+---
+<Base title="Guides — ShadowTechLife" description="Reliability-first smart home guides: Apple Home, Matter, Thread, Zigbee, Z-Wave and Home Assistant.">
+  <section class="section" style="border-top:none;padding-top:60px">
+    <div class="wrap">
+      <div class="sec-eyebrow">The guide library</div>
+      <h2>Every guide, categorized.</h2>
+      <p class="sec-lede">Searchable, referenceable, and updated when the protocols change. Filter by category below.</p>
+
+      <div id="filters" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:32px">
+        <button class="chip" data-cat="all" style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 14px;border-radius:20px;border:1px solid var(--wire);background:transparent;color:var(--text);cursor:pointer">All</button>
+        {categories.map((c) => (
+          <button class="chip" data-cat={c} style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:8px 14px;border-radius:20px;border:1px solid var(--wire);background:transparent;color:var(--text);cursor:pointer">{c}</button>
+        ))}
+      </div>
+
+      <div id="list" style="margin-top:36px;border-top:1px solid var(--line)">
+        {guides.map((g) => (
+          <a href={`/guides/${g.slug}`} class="guide-row" data-cat={g.data.category}
+             style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 4px;border-bottom:1px solid var(--line);text-decoration:none">
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;color:var(--white)">{g.data.title}</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--fog);margin-top:5px">{g.data.category.toUpperCase()} · {g.data.readingTime ?? ''} · {fmt(g.data.date)}</div>
+            </div>
+            <span style="font-family:'IBM Plex Mono',monospace;color:var(--local);font-size:15px;flex-shrink:0">→</span>
+          </a>
+        ))}
+      </div>
+      <p id="empty" style="display:none;color:var(--fog);margin-top:24px;font-family:'IBM Plex Mono',monospace;font-size:13px">No guides in this category yet.</p>
+    </div>
+  </section>
+</Base>
+
+<script is:inline>
+  (function () {
+    const params = new URLSearchParams(location.search);
+    const initial = params.get('cat');
+    const chips = document.querySelectorAll('.chip');
+    const rows = document.querySelectorAll('.guide-row');
+    const empty = document.getElementById('empty');
+
+    function apply(cat) {
+      let shown = 0;
+      rows.forEach((r) => {
+        const match = cat === 'all' || r.getAttribute('data-cat') === cat;
+        r.style.display = match ? 'flex' : 'none';
+        if (match) shown++;
+      });
+      empty.style.display = shown === 0 ? 'block' : 'none';
+      chips.forEach((c) => {
+        const on = c.getAttribute('data-cat') === cat;
+        c.style.borderColor = on ? 'var(--local)' : 'var(--wire)';
+        c.style.color = on ? 'var(--local)' : 'var(--text)';
+      });
+    }
+
+    chips.forEach((c) => c.addEventListener('click', () => {
+      const cat = c.getAttribute('data-cat');
+      const u = new URL(location.href);
+      if (cat === 'all') u.searchParams.delete('cat'); else u.searchParams.set('cat', cat);
+      history.replaceState({}, '', u);
+      apply(cat);
+    }));
+
+    apply(initial && [...chips].some((c) => c.getAttribute('data-cat') === initial) ? initial : 'all');
+  })();
+</script>

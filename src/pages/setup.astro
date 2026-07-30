@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Edit this list as your real setup changes. status: 'local' | 'cloud'
+const groups = [
+  {
+    heading: 'The brains',
+    idx: '01 / HUBS',
+    body: 'What orchestrates everything, why it runs locally, and the single point of failure I actively plan around.',
+    status: 'local',
+    label: 'RUNS LOCAL',
+  },
+  {
+    heading: 'Thread & Zigbee radios',
+    idx: '02 / RADIOS',
+    body: 'The border routers and coordinators that actually hold a mesh together under real load, not just on the box.',
+    status: 'local',
+    label: 'RUNS LOCAL',
+  },
+  {
+    heading: 'Sensors',
+    idx: '03 / SENSORS',
+    body: 'Motion, contact and climate sensors that report sub-second and never phone home.',
+    status: 'local',
+    label: 'RUNS LOCAL',
+  },
+  {
+    heading: 'The one cloud device I tolerate',
+    idx: '04 / EXCEPTION',
+    body: 'The single cloud-dependent device I keep, why it earns its place, and the local fallback sitting behind it.',
+    status: 'cloud',
+    label: 'CLOUD — WITH FALLBACK',
+  },
+];
+---
+<Base title="My Setup — ShadowTechLife" description="Every hub, radio and sensor I run, tagged by whether it survives an internet outage.">
+  <section class="section" style="border-top:none;padding-top:60px">
+    <div class="wrap">
+      <div class="sec-eyebrow">My current setup</div>
+      <h2>Everything I run — and whether it survives an outage.</h2>
+      <p class="sec-lede">A living list of the hubs, radios and sensors I trust, tagged by what keeps working when the internet doesn't. Updated as things get swapped in and out. Gifted units are disclosed as gifted; affiliate links may be used where I'd have bought the thing anyway.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:40px" class="setup-grid">
+        {groups.map((g) => (
+          <div style="border:1px solid var(--line);border-radius:10px;padding:24px 22px;background:var(--panel)">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--fog);margin-bottom:14px">{g.idx}</div>
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;color:var(--white);margin-bottom:8px;letter-spacing:-.3px">{g.heading}</h3>
+            <p style="font-size:14px;color:var(--fog);margin-bottom:14px">{g.body}</p>
+            <span class={`status ${g.status === 'local' ? 'l' : 'c'}`}><span class="dot"></span>{g.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  @media(max-width:760px){ .setup-grid{grid-template-columns:1fr!important} }
+</style>

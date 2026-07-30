@@ -1,0 +1,59 @@
+---
+import '../styles/global.css';
+const { title, description } = Astro.props;
+const pageTitle = title || "ShadowTechLife — Smart home that doesn't break";
+const pageDesc = description || "Apple Home, Matter, Thread, Zigbee and Z-Wave — tested for reliability and local control. The failure points nobody puts in the marketing.";
+const path = Astro.url.pathname;
+function active(href) {
+  if (href === '/') return path === '/';
+  return path.startsWith(href);
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDesc} />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href={new URL(path, Astro.site)} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="wrap nav-in">
+      <a href="/" class="logo"><span class="dot"></span>ShadowTechLife</a>
+      <div class="nav-links">
+        <a href="/#start" aria-current={active('/#start') ? 'page' : undefined}>Start Here</a>
+        <a href="/guides" aria-current={active('/guides') ? 'page' : undefined}>Guides</a>
+        <a href="/setup" aria-current={active('/setup') ? 'page' : undefined}>My Setup</a>
+        <a href="/#newsletter">Newsletter</a>
+        <a href="/work" aria-current={active('/work') ? 'page' : undefined}>Work With Me</a>
+      </div>
+    </div>
+  </nav>
+
+  <slot />
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="foot-in">
+        <a href="/" class="logo"><span class="dot"></span>ShadowTechLife</a>
+        <div class="foot-links">
+          <a href="https://youtube.com/@ShadowTechLife" rel="me">YouTube</a>
+          <a href="https://instagram.com/shadowtechlife" rel="me">Instagram</a>
+          <a href="https://tiktok.com/@shadowtechlife" rel="me">TikTok</a>
+          <a href="https://facebook.com/shadowtechlife" rel="me">Facebook</a>
+        </div>
+      </div>
+      <div class="foot-note">Local-first smart home, tested in a real house in Braga. © 2026 ShadowTechLife.</div>
+    </div>
+  </footer>
+</body>
+</html>
